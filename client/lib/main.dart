@@ -1,18 +1,14 @@
-import 'dart:math';
-import 'package:ble_ips_example4/Models/Manager/PositionManager.dart';
-import 'package:ble_ips_example4/Models/Manager/RoomManager.dart';
-import 'package:ble_ips_example4/Models/Room.dart';
-import 'package:ble_ips_example4/Models/offsetPosition.dart';
+import 'package:ble_ips_example4/src/models/Manager/PositionManager.dart';
+import 'package:ble_ips_example4/src/models/Manager/RoomManager.dart';
+import 'package:ble_ips_example4/src/models/Room.dart';
+import 'package:ble_ips_example4/src/models/offsetPosition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
-import 'package:simple_kalman/simple_kalman.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
-
-import 'animation_paint.dart';
-import 'ble_data.dart';
+import 'src/utils/animation_paint.dart';
+import 'src/utils/ble_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -154,6 +150,7 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.deepOrangeAccent,
         actions: [
           IconButton(
             icon: Icon(
@@ -189,11 +186,8 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const FlutterLogo(
-                  size: 40,
-                ),
                 TextAnimator(
-                  'Tìm Thiết Bị BLE Xung Quanh',
+                  'Find Bluetooth Devices',
                   atRestEffect:
                       WidgetRestingEffects.pulse(effectStrength: 0.25),
                   style: Theme.of(context).textTheme.headline6,
@@ -206,25 +200,21 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Chọn bản đồ: ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  'Choose a map: ',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
                 ),
                 Container(
-                  width: 200,
+                  width: 150,
                   child: Center(
                     child: DropdownButton<String>(
                         items: <DropdownMenuItem<String>>[
                           DropdownMenuItem<String>(
                             value: 'Class',
-                            child: Text('Phòng học'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Library',
-                            child: Text('Thư viện trường'),
+                            child: Text('Classroom'),
                           ),
                           DropdownMenuItem<String>(
                             value: 'School',
-                            child: Text('Trường CNTT & TT'),
+                            child: Text('CICT'),
                           ),
                         ],
                         value: context.read<PositionManager>().location,
@@ -256,12 +246,12 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    color: Colors.blue),
+                    color: Colors.deepOrangeAccent),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: Container(
                   child: Text(
-                    'Bắt Đầu Quét',
+                    'Start Scanning',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
@@ -272,179 +262,3 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
         ),
       );
 }
-
-// import 'dart:math' as math;
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_compass/flutter_compass.dart';
-
-// void main() => runApp(MyApp());
-
-// class MyApp extends StatefulWidget {
-//   const MyApp({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   _MyAppState createState() => _MyAppState();
-// }
-
-// class _MyAppState extends State<MyApp> {
-//   CompassEvent? _lastRead;
-//   DateTime? _lastReadAt;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         backgroundColor: Colors.white,
-//         appBar: AppBar(
-//           title: const Text('Flutter Compass'),
-//         ),
-//         body: Builder(builder: (context) {
-//           return Column(
-//             children: <Widget>[
-//               _buildManualReader(),
-//               Expanded(child: _buildCompass()),
-//             ],
-//           );
-//         }),
-//       ),
-//     );
-//   }
-
-//   Widget _buildManualReader() {
-//     return Padding(
-//       padding: const EdgeInsets.all(16.0),
-//       child: Row(
-//         children: <Widget>[
-//           ElevatedButton(
-//             child: Text('Read Value'),
-//             onPressed: () async {
-//               final CompassEvent tmp = await FlutterCompass.events!.first;
-//               setState(() {
-//                 _lastRead = tmp;
-//                 _lastReadAt = DateTime.now();
-//               });
-//             },
-//           ),
-//           Expanded(
-//             child: Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: <Widget>[
-//                   Text(
-//                     '$_lastRead',
-//                     style: Theme.of(context).textTheme.caption,
-//                   ),
-//                   Text(
-//                     '$_lastReadAt',
-//                     style: Theme.of(context).textTheme.caption,
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildCompass() {
-//     return StreamBuilder<CompassEvent>(
-//       stream: FlutterCompass.events,
-//       builder: (context, snapshot) {
-//         if (snapshot.hasError) {
-//           return Text('Error reading heading: ${snapshot.error}');
-//         }
-
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Center(
-//             child: CircularProgressIndicator(),
-//           );
-//         }
-
-//         double? direction = snapshot.data!.heading;
-
-//         // if direction is null, then device does not support this sensor
-//         // show error message
-//         if (direction == null)
-//           return Center(
-//             child: Text("Device does not have sensors !"),
-//           );
-
-//         return Material(
-//           shape: CircleBorder(),
-//           clipBehavior: Clip.antiAlias,
-//           elevation: 4.0,
-//           child: Container(
-//             padding: EdgeInsets.all(16.0),
-//             alignment: Alignment.center,
-//             decoration: BoxDecoration(
-//               shape: BoxShape.circle,
-//             ),
-//             child: Transform.rotate(
-//               angle: (direction * (math.pi / 180) * -1),
-//               child: Image.asset('assets/compass.jpg'),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-
-// // import 'package:flutter/material.dart';
-// // import 'package:flutter/services.dart';
-// // import 'package:ble_ips_example4/controller/requirement_state_controller.dart';
-// // import 'package:ble_ips_example4/view/home_page.dart';
-// // import 'package:get/get.dart';
-
-// // void main() {
-// //   runApp(MyApp());
-// // }
-
-// // class MyApp extends StatelessWidget {
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     Get.put(RequirementStateController());
-
-// //     final themeData = Theme.of(context);
-// //     final primary = Colors.blue;
-
-// //     return GetMaterialApp(
-// //       theme: ThemeData(
-// //         brightness: Brightness.light,
-// //         primarySwatch: primary,
-// //         appBarTheme: themeData.appBarTheme.copyWith(
-// //           brightness: Brightness.light,
-// //           elevation: 0.5,
-// //           color: Colors.white,
-// //           actionsIconTheme: themeData.primaryIconTheme.copyWith(
-// //             color: primary,
-// //           ),
-// //           iconTheme: themeData.primaryIconTheme.copyWith(
-// //             color: primary,
-// //           ),
-// //           textTheme: themeData.primaryTextTheme.copyWith(
-// //             headline6: themeData.textTheme.headline6?.copyWith(
-// //               color: primary,
-// //             ),
-// //           ),
-// //         ),
-// //       ),
-// //       darkTheme: ThemeData(
-// //         brightness: Brightness.dark,
-// //         primarySwatch: primary,
-// //       ),
-// //       home: HomePage(),
-// //     );
-// //   }
-// // }

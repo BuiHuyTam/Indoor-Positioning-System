@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:simple_kalman/simple_kalman.dart';
 
 @override
 class ScanResult1 {

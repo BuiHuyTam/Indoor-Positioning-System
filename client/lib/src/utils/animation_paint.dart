@@ -1,8 +1,8 @@
-import 'package:ble_ips_example4/Models/InforPosition.dart';
-import 'package:ble_ips_example4/Models/Manager/PositionManager.dart';
-import 'package:ble_ips_example4/helper.dart';
-import 'package:ble_ips_example4/search_screen.dart';
-import 'package:ble_ips_example4/trilateration_method.dart';
+import 'package:ble_ips_example4/src/models/InforPosition.dart';
+import 'package:ble_ips_example4/src/models/Manager/PositionManager.dart';
+import 'package:ble_ips_example4/src/utils/helper.dart';
+import 'package:ble_ips_example4/src/widgets/search_screen.dart';
+import 'package:ble_ips_example4/src/utils/trilateration_method.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'ble_data.dart';

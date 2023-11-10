@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:lvtn_admin/src/models/InforPosition.dart';
 import 'package:lvtn_admin/src/models/Position.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -7,8 +6,11 @@ class PositionService {
   PositionService() : super();
   var db;
   Future<void> connectDB() async {
+    // db = await Db.create(
+    //     'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
     db = await Db.create(
-        'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
+        // 'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
+        'mongodb+srv://bhtam:Huytam2801@cluster0.3d0ijiw.mongodb.net/NCKH?retryWrites=true&w=majority');
     await db.open();
   }
 

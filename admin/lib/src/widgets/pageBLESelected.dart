@@ -1,11 +1,9 @@
 import 'dart:math';
-
 import 'package:lvtn_admin/src/models/InforPosition.dart';
 import 'package:lvtn_admin/src/models/Manager/PositionManager.dart';
 import 'package:lvtn_admin/src/models/offsetPosition.dart';
 import 'package:lvtn_admin/src/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -169,7 +167,7 @@ class _pageBLESelectedState extends State<pageBLESelected> {
                       child: context
                                   .read<PositionManager>()
                                   .positions
-                                  .infor
+                                  ?.infor
                                   .firstWhereOrNull((element) =>
                                       element.macAddress == macAddress) !=
                               null

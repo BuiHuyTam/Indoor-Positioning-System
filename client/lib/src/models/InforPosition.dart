@@ -1,4 +1,4 @@
-import 'package:ble_ips_example4/Models/offsetPosition.dart';
+import 'package:ble_ips_example4/src/models/offsetPosition.dart';
 
 class InforPosition {
   final int id;

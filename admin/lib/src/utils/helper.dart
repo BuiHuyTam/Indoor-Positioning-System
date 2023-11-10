@@ -1,5 +1,4 @@
 import 'package:lvtn_admin/src/utils/ble_data.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 /* device name check */
 String deviceNameCheck(ScanResult1 r) {

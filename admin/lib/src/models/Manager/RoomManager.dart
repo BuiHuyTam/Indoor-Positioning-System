@@ -1,4 +1,3 @@
-import 'package:lvtn_admin/src/models/InforPosition.dart';
 import 'package:lvtn_admin/src/models/Room.dart';
 import 'package:lvtn_admin/src/models/offsetPosition.dart';
 import 'package:lvtn_admin/src/services/roomService.dart';
@@ -47,29 +46,6 @@ class RoomManager with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> addPosition(InforPosition infor) async {
-  //   await _roomService.addPosition(infor, _location);
-  //   await fetchPositions();
-  //   notifyListeners();
-  // }
-
-  // Future<void> deletePosition(InforPosition infor) async {
-  //   await _roomService.deletePosition(infor, _location);
-  //   await fetchPositions();
-  //   notifyListeners();
-  // }
-
-  // Future<void> deletePosition(String id) async {
-  //   final index = _room.indexWhere((item) => item.id == id);
-  //   Position? existingPosition = _room[index];
-  //   _room.removeAt(index);
-  //   notifyListeners();
-
-  //   if (!await _roomService.deletePosition(id)) {
-  //     _room.insert(index, existingPosition);
-  //     notifyListeners();
-  //   }
-  // }
   void setUserRoom(Room room) {
     _userRoom = room;
     notifyListeners();

@@ -1,23 +1,23 @@
-import 'package:ble_ips_example4/Models/Manager/PositionManager.dart';
-import 'package:ble_ips_example4/Models/Manager/RoomManager.dart';
-import 'package:ble_ips_example4/Models/Room.dart';
-import 'package:ble_ips_example4/Models/offsetPosition.dart';
-import 'package:ble_ips_example4/choose_map.dart';
-import 'package:ble_ips_example4/direction.dart';
+import 'package:ble_ips_example4/src/models/Manager/PositionManager.dart';
+import 'package:ble_ips_example4/src/models/Manager/RoomManager.dart';
+import 'package:ble_ips_example4/src/models/Room.dart';
+import 'package:ble_ips_example4/src/widgets/choose_map.dart';
+import 'package:ble_ips_example4/src/utils/direction.dart';
 import 'package:flutter/material.dart';
 // import 'package:location/views/Search_details_screen.dart';
 // import 'package:location/constrain.dart';
 import 'package:provider/provider.dart';
 
-class SearchUserScreen extends StatefulWidget {
-  const SearchUserScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
   @override
-  State<SearchUserScreen> createState() => _SearchUserScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchUserScreenState extends State<SearchUserScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   final from = ValueNotifier('');
   List<String> recentlySearch = [];
+  List<Room> list = [];
 
   late Future<void> _fetchRooms;
 
@@ -26,7 +26,15 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     _fetchRooms = context.read<RoomManager>().initilize().then((value) {
       context
           .read<RoomManager>()
-          .fetchPositions(context.read<PositionManager>().location);
+          .fetchPositions(context.read<PositionManager>().location)
+          .then((value) {
+        setState(() {
+          list = context.read<RoomManager>().search!;
+        });
+      });
+      setState(() {
+        list = context.read<RoomManager>().search!;
+      });
     });
     super.initState();
   }
@@ -42,132 +50,61 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
               height: 10,
             ),
             fromInputBox(),
-            Container(
-              child: Column(children: [
-                GestureDetector(
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 20,
-                    ),
-                    child: Column(
+            SizedBox(height: 20),
+            GestureDetector(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.green[50],
-                                child: Icon(
-                                  Icons.radio_button_checked_outlined,
-                                  color: Colors.blue,
-                                  size: 17,
-                                ),
-                              ),
+                        SizedBox(
+                          width: 30,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.amber[50],
+                            child: Icon(
+                              Icons.location_on,
+                              color: Colors.red[800],
+                              size: 17,
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Vị trí của bạn',
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Chọn trên bản đồ',
                               ),
-                            )
-                          ],
-                        ),
-                        Divider(
-                          thickness: 1,
-                        ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                  onTap: () {
-                    context.read<RoomManager>().setUserRoom(Room(
-                        maSo: 0,
-                        map: '',
-                        neightbor: {},
-                        name: '',
-                        offset: OffsetPosition(x: 0, y: 0),
-                        luotTruyCap: 0,
-                        keyWord: []));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Direction(),
-                      ),
-                    );
-                  },
-                ),
-                GestureDetector(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
+                    Divider(
+                      thickness: 1,
                     ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.amber[50],
-                                child: Icon(
-                                  Icons.location_on,
-                                  color: Colors.red[800],
-                                  size: 17,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Chọn trên bản đồ',
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Divider(
-                          thickness: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChooseMap(location: 'user'),
-                      ),
-                    );
-                  },
+                  ],
                 ),
-              ]),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChooseMap(location: 'search'),
+                  ),
+                );
+              },
             ),
-            Container(
-              height: 10,
-              color: Colors.grey[200],
-            ),
+            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -193,8 +130,8 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                     child: Center(
                       child: ValueListenableBuilder<String>(
                         valueListenable: from,
-                        builder: ((context, value, child) => searchListView(
-                            context.read<RoomManager>().search!)),
+                        builder: ((context, value, child) =>
+                            searchListView(list)),
                       ),
                     ),
                   );
@@ -272,7 +209,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
           onTap: () async {
             await context.read<RoomManager>().updateRoom(matchQuery[i]
                 .copyWith(luotTruyCap: matchQuery[i].luotTruyCap + 1));
-            context.read<RoomManager>().setUserRoom(matchQuery[i]);
+            context.read<RoomManager>().setSearchRoom(matchQuery[i]);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -295,6 +232,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
       ),
       child: TextFormField(
         // options: room,
+        autofocus: true,
         onFieldSubmitted: ((value) {
           // print(value);
         }),
@@ -302,11 +240,11 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
           from.value = value;
         },
         decoration: InputDecoration(
-          hintText: "Vị trí hiện tại?",
+          hintText: "Tìm kiếm...",
           prefixIcon: IconButton(
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: Colors.blue,
+              color: Colors.black,
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -318,10 +256,13 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(28),
             borderSide: BorderSide(
-              color: Colors.blue,
+              color: Colors.black,
             ),
           ),
-          suffixIcon: Icon(Icons.clear),
+          suffixIcon: Icon(
+            Icons.clear,
+            color: Colors.black,
+          ),
         ),
       ),
     );

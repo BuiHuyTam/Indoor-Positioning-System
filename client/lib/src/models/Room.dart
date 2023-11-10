@@ -1,4 +1,4 @@
-import 'package:ble_ips_example4/Models/offsetPosition.dart';
+import 'package:ble_ips_example4/src/models/offsetPosition.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class Room {

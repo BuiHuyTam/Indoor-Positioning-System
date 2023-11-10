@@ -1,4 +1,4 @@
-import 'package:ble_ips_example4/ble_data.dart';
+import 'package:ble_ips_example4/src/utils/ble_data.dart';
 
 /* device name check */
 String deviceNameCheck(ScanResult1 r) {

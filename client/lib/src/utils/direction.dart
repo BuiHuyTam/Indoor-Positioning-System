@@ -1,12 +1,12 @@
-import 'package:ble_ips_example4/Models/InforPosition.dart';
-import 'package:ble_ips_example4/Models/Manager/PositionManager.dart';
-import 'package:ble_ips_example4/Models/Manager/RoomManager.dart';
-import 'package:ble_ips_example4/Models/Room.dart';
-import 'package:ble_ips_example4/Models/offsetPosition.dart';
-import 'package:ble_ips_example4/helper.dart';
-import 'package:ble_ips_example4/search_screen.dart';
-import 'package:ble_ips_example4/search_user_screen.dart';
-import 'package:ble_ips_example4/trilateration_method.dart';
+import 'package:ble_ips_example4/src/models/InforPosition.dart';
+import 'package:ble_ips_example4/src/models/Manager/PositionManager.dart';
+import 'package:ble_ips_example4/src/models/Manager/RoomManager.dart';
+import 'package:ble_ips_example4/src/models/Room.dart';
+import 'package:ble_ips_example4/src/models/offsetPosition.dart';
+import 'package:ble_ips_example4/src/utils/helper.dart';
+import 'package:ble_ips_example4/src/widgets/search_screen.dart';
+import 'package:ble_ips_example4/src/widgets/search_user_screen.dart';
+import 'package:ble_ips_example4/src/utils/trilateration_method.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'ble_data.dart';
@@ -46,7 +46,7 @@ class DirectionState extends State<Direction>
     infor = context.read<PositionManager>().positions?.infor ?? [];
     //animation duration 1 seconds
     controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       vsync: this,
     )
       ..addListener(() => setState(() {}))
@@ -93,7 +93,6 @@ class DirectionState extends State<Direction>
 
   /* log distance path loss model */
   num logDistancePathLoss(double rssi, double alpha, double constantN) {
-    // Distance = 10 ^ ((Measured Power - RSSI)/(10 * N))
     return pow(10.0, ((alpha - rssi) / (10 * constantN)));
   }
 
@@ -196,7 +195,7 @@ class DirectionState extends State<Direction>
                 top: 0,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .15,
+                  height: MediaQuery.of(context).size.height * .2,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [

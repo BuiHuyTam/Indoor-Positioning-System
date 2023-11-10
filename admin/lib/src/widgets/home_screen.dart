@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:lvtn_admin/src/models/Manager/PositionManager.dart';
 import 'package:lvtn_admin/src/widgets/pageBLEScan.dart';
 import 'package:lvtn_admin/src/widgets/pageBLESelected.dart';
@@ -8,8 +7,6 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:lvtn_admin/src/widgets/search_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'package:simple_kalman/simple_kalman.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utils/ble_data.dart';
 
@@ -45,7 +42,7 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
   }
 
   /* start or stop callback */
-  void toggleState() {
+  Future<void> toggleState() async {
     isScanning = !isScanning;
     if (isScanning) {
       flutterBlue.startScan(scanMode: const ScanMode(2), allowDuplicates: true);
@@ -80,6 +77,7 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor: Colors.deepOrangeAccent,
           actions: [
             IconButton(
               icon: Icon(isScanning ? Icons.stop : Icons.play_arrow),
@@ -99,8 +97,8 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
                   controller: _pageController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    isScanning ? pageBLEScan() : startScan(),
-                    pageBLESelected(),
+                    isScanning ? const pageBLEScan() : startScan(),
+                    const pageBLESelected(),
                     const SearchScreen(),
                   ]);
             }),
@@ -113,22 +111,33 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
           },
           items: <BottomBarItem>[
             BottomBarItem(
-              icon: const Icon(Icons.bluetooth),
+              icon: const Icon(
+                Icons.bluetooth,
+                color: Colors.black,
+              ),
               title: const Text('BLE Scan'),
-              activeColor: Colors.blue,
-              activeTitleColor: Colors.blue.shade600,
+              activeColor: Colors.deepOrangeAccent,
+              activeTitleColor: Colors.black,
             ),
             BottomBarItem(
-              icon: const Icon(Icons.map),
+              icon: const Icon(
+                Icons.map,
+                color: Colors.black,
+              ),
               title: const Text('List Anchor'),
               backgroundColorOpacity: 0.1,
-              activeColor: Colors.blueAccent.shade700,
+              activeTitleColor: Colors.black,
+              activeColor: Colors.deepOrangeAccent,
             ),
             BottomBarItem(
-              icon: const Icon(Icons.place),
+              icon: const Icon(
+                Icons.place,
+                color: Colors.black,
+              ),
               title: const Text('List Room'),
               backgroundColorOpacity: 0.1,
-              activeColor: Colors.redAccent.shade700,
+              activeTitleColor: Colors.black,
+              activeColor: Colors.deepOrangeAccent,
             ),
           ],
         ));
@@ -141,7 +150,6 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const FlutterLogo(),
                 TextAnimator(
                   'Scan Bluetooth Device',
                   atRestEffect:
@@ -155,7 +163,7 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Choose Room: ',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
@@ -164,15 +172,15 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
                   child: Center(
                     child: DropdownButton<String>(
                         items: <DropdownMenuItem<String>>[
-                          DropdownMenuItem<String>(
+                          const DropdownMenuItem<String>(
                             value: 'Class',
                             child: Text('Class'),
                           ),
-                          DropdownMenuItem<String>(
+                          const DropdownMenuItem<String>(
                             value: 'Library',
                             child: Text('Library'),
                           ),
-                          DropdownMenuItem<String>(
+                          const DropdownMenuItem<String>(
                             value: 'School',
                             child: Text('School'),
                           ),
@@ -193,11 +201,11 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    color: Colors.blue),
+                    color: Colors.deepOrangeAccent),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: Container(
-                  child: Text(
+                  child: const Text(
                     'Start Scan',
                     style: TextStyle(fontSize: 22, color: Colors.white),
                   ),

@@ -1,6 +1,6 @@
-import 'package:ble_ips_example4/Models/InforPosition.dart';
-import 'package:ble_ips_example4/Models/Position.dart';
-import 'package:ble_ips_example4/Services/positionService.dart';
+import 'package:ble_ips_example4/src/models/InforPosition.dart';
+import 'package:ble_ips_example4/src/models/Position.dart';
+import 'package:ble_ips_example4/src/services/positionService.dart';
 import 'package:flutter/foundation.dart';
 
 class PositionManager with ChangeNotifier {

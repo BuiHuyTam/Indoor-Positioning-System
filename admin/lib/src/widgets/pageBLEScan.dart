@@ -3,7 +3,6 @@ import 'package:lvtn_admin/src/models/Manager/PositionManager.dart';
 import 'package:lvtn_admin/src/models/offsetPosition.dart';
 import 'package:lvtn_admin/src/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:rolling_switch/rolling_switch.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,7 @@ class _pageBLEScanState extends State<pageBLEScan> {
   List<InforPosition> infor = [];
   @override
   initState() {
-    infor = context.read<PositionManager>().positions.infor;
+    infor = context.read<PositionManager>().positions?.infor ?? [];
     super.initState();
   }
 

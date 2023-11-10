@@ -1,4 +1,4 @@
-import 'package:ble_ips_example4/Models/InforPosition.dart';
+import 'package:ble_ips_example4/src/models/InforPosition.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class Position {

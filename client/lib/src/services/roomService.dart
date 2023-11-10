@@ -1,47 +1,41 @@
-import 'package:ble_ips_example4/Models/InforPosition.dart';
-import 'package:ble_ips_example4/Models/Position.dart';
+import 'package:ble_ips_example4/src/models/InforPosition.dart';
+import 'package:ble_ips_example4/src/models/Room.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-class PositionService {
-  PositionService() : super();
+class RoomService {
+  RoomService() : super();
   var db;
   Future<void> connectDB() async {
+    // db = await Db.create(
+    //     'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
     db = await Db.create(
-        'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
+        // 'mongodb+srv://quoctrang12:trang12345@cluster0.cckksgh.mongodb.net/LVTN?retryWrites=true&w=majority');
+        'mongodb+srv://bhtam:Huytam2801@cluster0.3d0ijiw.mongodb.net/NCKH?retryWrites=true&w=majority');
     await db.open();
   }
 
-  Future<Position?> fetchPositions(String location) async {
-    Position? position;
+  Future<List<Room>?> fetchPositions(location) async {
+    List<Room> rooms = [];
     try {
-      var collection = db.collection('Position');
+      var collection = db.collection('Search');
 
-      await collection.find(where.eq('location', location)).forEach((v) {
-        position = Position.fromJson(v);
+      await collection.find(where.eq('map', location)).forEach((v) {
+        rooms.add(Room.fromJson(v));
       });
 
-      return position;
+      return rooms;
     } catch (error) {
       print(error);
-      return position;
+      return rooms;
     }
   }
 
-  Future<bool> updatePosition(InforPosition infor, String location) async {
+  Future<bool> updateRoom(Room room) async {
+    // print(room.luotTruyCap);
     try {
-      var collection = db.collection('Position');
-      collection.updateOne(
-          where.eq('location', location),
-          modify
-              .set(r'infor.$[element].rssi1M', infor.rssi1M)
-              .set(r'infor.$[element].offset.x', infor.offset.x)
-              .set(r'infor.$[element].offset.y', infor.offset.y),
-          arrayFilters: [
-            {
-              'element.macAddress': {r'$eq': infor.macAddress}
-            }
-          ]);
-
+      var collection = db.collection('Search');
+      collection.updateOne(where.eq('_id', room.id),
+          modify.set('luotTruyCap', room.luotTruyCap));
       return true;
     } catch (error) {
       print(error);

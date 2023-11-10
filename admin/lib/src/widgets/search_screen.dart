@@ -4,7 +4,6 @@ import 'package:lvtn_admin/src/models/Room.dart';
 import 'package:flutter/material.dart';
 import 'package:lvtn_admin/src/models/offsetPosition.dart';
 import 'package:provider/provider.dart';
-import 'package:dropdown_plus/dropdown_plus.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -39,7 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         floatingActionButton: Container(
           decoration: BoxDecoration(
-              color: Colors.blue, borderRadius: BorderRadius.circular(25)),
+              color: Colors.deepOrangeAccent,
+              borderRadius: BorderRadius.circular(25)),
           child: IconButton(
             icon: Icon(
               Icons.add,
@@ -434,7 +434,7 @@ class _SearchScreenState extends State<SearchScreen> {
           prefixIcon: IconButton(
             icon: Icon(
               Icons.search,
-              color: Colors.blue,
+              color: Colors.black,
             ),
             onPressed: () {},
           ),

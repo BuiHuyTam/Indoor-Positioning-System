@@ -39,26 +39,16 @@ List trilaterationMethod(List<Anchor> anchorList, double maxDistance) {
           2
     ]);
   }
-  // anchorList = [{3,1},{3,2},{1,2},{1,1}]
-  // print(matrixA); => [[0.0, 1.0], [-2.0, 1.0], [-2.0, 0.0]]
-  // print(matrixB); => [[-0.9207553403769446], [-3.213201936607501], [-4.713201936607501]]
 
   var matrixATranspose = transposeDouble(matrixA);
-  // print(matrixATranspose);
-  // => [[0.0, -2.0, -2.0], [1.0, 1.0, 0.0]]
 
   var matrixInverse = dim2InverseMatrix(m2d.dot(
           matrixATranspose, matrixA) // m2d.dot => nhân 2 ma trận lại với nhau
       );
-  //  print(matrixInverse);
-  // => [[0.16666666666666666, 0.16666666666666666], [0.16666666666666666, 0.6666666666666666]]
+
   var matrixDot = m2d.dot(matrixInverse, matrixATranspose);
-  // print(matrixDot);
-  // => [[0.16666666666666666, -0.16666666666666666, -0.3333333333333333], [0.6666666666666666, 0.3333333333333333, -0.3333333333333333]]
 
   var position = m2d.dot(matrixDot, matrixB);
-  // print(position);
-  // => [[1.9531417449075927], [-0.1138368935846299]]
 
   return position;
 }

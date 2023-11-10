@@ -66,7 +66,7 @@ class PositionManager with ChangeNotifier {
     return _location;
   }
 
-  Position get positions {
-    return _position!;
+  Position? get positions {
+    return _position;
   }
 }
