@@ -19,7 +19,6 @@ class CircleRoute extends StatefulWidget {
 
 class CircleRouteState extends State<CircleRoute>
     with SingleTickerProviderStateMixin {
-  double waveRadius = 100.0;
   late AnimationController controller;
   var centerXList = [];
   var centerYList = [];
@@ -36,11 +35,9 @@ class CircleRouteState extends State<CircleRoute>
 
   @override
   void initState() {
-    // infor = context.read<PositionManager>().positions.infor;
-    infor = context.read<PositionManager>().positions?.infor ?? [];
     super.initState();
+    infor = context.read<PositionManager>().positions?.infor ?? [];
 
-    //animation duration 1 seconds
     controller = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -52,43 +49,55 @@ class CircleRouteState extends State<CircleRoute>
           controller.reverse();
         } else if (status == AnimationStatus.dismissed) {
           controller.forward();
-          // list position anchor
+
           centerXList = bleController.selectedCenterXList;
           centerYList = bleController.selectedCenterYList;
-          // initialize radius list
+
           radiusList = [];
 
           for (int i = 0; i < bleController.selectedDistanceList.length; i++) {
             radiusList.add(0.0);
           }
-          // rssi to distance
+
           for (int idx = 0;
               idx < bleController.selectedDistanceList.length;
               idx++) {
-            // rssi in device [idx]
             var rssi = bleController
                 .scanResultList[bleController.selectedDeviceIdxList[idx]]
                 .rssi
                 .last;
 
-            // rssi on 1m to device
             var alpha = bleController.selectedRSSI_1mList[idx];
-            // the constant for the environmental facto
+
             var constantN = bleController.selectedConstNList[idx];
 
-            // var distance = rssi * -1;
-            var distance = logDistancePathLoss(
+            var distance = _logDistancePathLoss(
                 rssi.toDouble(), alpha.toDouble(), constantN.toDouble());
 
             radiusList[idx] = distance;
           }
         }
       });
+    for (var i = 0; i < bleController.scanResultList.length; i++) {
+      toStringBLE(bleController.scanResultList[i]);
+      bleController.updateBLEList(
+          deviceName: deviceName,
+          macAddress: macAddress,
+          rssi: rssi,
+          serviceUUID: serviceUUID,
+          manuFactureData: manuFactureData,
+          tp: tp);
+      InforPosition? temp =
+          infor.firstWhereOrNull((element) => element.macAddress == macAddress);
+      if (temp != null) {
+        bleController.updateselectedDeviceIdx(
+            i, 2, -temp.rssi1M, temp.offset.x, temp.offset.y, 0);
+      }
+      setState(() {});
+    }
   }
 
-  /* log distance path loss model */
-  num logDistancePathLoss(double rssi, double alpha, double constantN) {
-    // Distance = 10 ^ ((Measured Power - RSSI)/(10 * N))
+  num _logDistancePathLoss(double rssi, double alpha, double constantN) {
     return pow(10.0, ((alpha - rssi) / (10 * constantN)));
   }
 
@@ -111,24 +120,6 @@ class CircleRouteState extends State<CircleRoute>
 
   @override
   Widget build(BuildContext context) {
-    for (var i = 0; i < bleController.scanResultList.length; i++) {
-      // print(i);
-      toStringBLE(bleController.scanResultList[i]);
-      bleController.updateBLEList(
-          deviceName: deviceName,
-          macAddress: macAddress,
-          rssi: rssi,
-          serviceUUID: serviceUUID,
-          manuFactureData: manuFactureData,
-          tp: tp);
-      InforPosition? temp =
-          infor.firstWhereOrNull((element) => element.macAddress == macAddress);
-      if (temp != null) {
-        bleController.updateselectedDeviceIdx(
-            i, 2, -temp.rssi1M, temp.offset.x, temp.offset.y, 0);
-      }
-      setState(() {});
-    }
     int tile = context.read<PositionManager>().location == 'Class' ? 85 : 62;
     return Stack(
       children: [
@@ -158,7 +149,6 @@ class CircleRouteState extends State<CircleRoute>
               child: CustomPaint(
                 foregroundPainter:
                     CirclePainter(centerXList, centerYList, radiusList, tile),
-                // painter: GridPainter(),
               ),
             ),
           ),
@@ -242,7 +232,6 @@ class CirclePainter extends CustomPainter {
 
     if (radiusList.isNotEmpty) {
       for (int i = 0; i < radiusList.length; i++) {
-        // radius
         var radius = radiusList[i] > bleController.maxDistance
             ? bleController.maxDistance
             : radiusList[i];
@@ -250,10 +239,10 @@ class CirclePainter extends CustomPainter {
             centerX: centerXList[i], centerY: centerYList[i], radius: radius));
         canvas.drawCircle(Offset(centerXList[i] * tile, centerYList[i] * tile),
             radius * tile, anchorePaint);
-        // centerX, centerY
+
         canvas.drawCircle(Offset(centerXList[i] * tile, centerYList[i] * tile),
             2, anchorePaint);
-        // anchor text paint
+
         var anchorTextPainter = TextPainter(
           text: TextSpan(
             text: 'Anchor$i\n(${centerXList[i]}, ${centerYList[i]})',
@@ -270,61 +259,17 @@ class CirclePainter extends CustomPainter {
         );
         anchorTextPainter.paint(
             canvas, Offset(centerXList[i] * tile - 27, centerYList[i] * tile));
-        // radius text paint
-        // var radiusTextPainter = TextPainter(
-        //   text: TextSpan(
-        //     text: '  ${radius.toStringAsFixed(2)}m',
-        //     style: const TextStyle(
-        //       color: Colors.black,
-        //       fontSize: 10,
-        //     ),
-        //   ),
-        //   textDirection: TextDirection.ltr,
-        // );
-        // radiusTextPainter.layout(
-        //   minWidth: 0,
-        //   maxWidth: size.width,
-        // );
-        // radiusTextPainter.paint(
-        //     canvas,
-        //     Offset(centerXList[i] * tile,
-        //         centerYList[i] * tile - (radius * tile) / 2 - 5));
-        // draw a line
-        // var p1 = Offset(centerXList[i] * tile, centerYList[i] * tile);
-        // var p2 = Offset(
-        //     centerXList[i] * tile, centerYList[i] * tile - radiusList[i] * tile);
-
-        // canvas.drawLine(p1, p2, anchorePaint);
-
-        // drawDashedLine(canvas, anchorePaint, centerXList[i] * tile,
-        //     centerYList[i] * tile, radius * tile);
       }
 
-      // Path outline = Path()
-      //   ..moveTo(100, 100)
-      //   ..lineTo(400, 100)
-      //   ..lineTo(400, 400)
-      //   ..lineTo(100, 400)
-      //   ..close();
-      // canvas.drawPath(outline, outlinePaint);
-      // Path door = Path()
-      //   ..moveTo(300, 100)
-      //   ..lineTo(300, 150)
-      //   ..quadraticBezierTo(250, 140, 250, 100);
-
-      // canvas.drawPath(door, outlinePaint);
-
-      // decision max distance
       if (anchorList.length >= 3) {
         for (int i = 0; i < anchorList.length - 1; i++) {
           pointDistance.add(sqrt(
               pow((anchorList[i + 1].centerX - anchorList[0].centerX), 2) +
                   pow((anchorList[i + 1].centerY - anchorList[0].centerY), 2)));
         }
-        // print(pointDistance);
+
         var maxDistance = pointDistance.reduce(max);
         bleController.maxDistance = maxDistance;
-        // print(maxDistance);
 
         anchorList.sort((a, b) => a.radius.compareTo(b.radius));
 
@@ -351,25 +296,6 @@ class CirclePainter extends CustomPainter {
           }
           textPainter.paint(canvas,
               Offset(position[0][0] * tile - 15, position[1][0] * tile - 15));
-
-          // var positionTextPainter = TextPainter(
-          //   text: TextSpan(
-          //     text:
-          //         '(${position[0][0].toStringAsFixed(2)}, ${position[1][0].toStringAsFixed(2)})',
-          //     style: const TextStyle(
-          //       color: Colors.black,
-          //       fontSize: 10,
-          //     ),
-          //   ),
-          //   textDirection: TextDirection.ltr,
-          // );
-          // positionTextPainter.layout(
-          //   minWidth: 0,
-          //   maxWidth: size.width,
-          // );
-
-          // positionTextPainter.paint(canvas,
-          //     Offset(position[0][0] * 100 - 25, position[1][0] * 100 + 10));
         }
       }
     }
@@ -382,7 +308,6 @@ class CirclePainter extends CustomPainter {
     double startY = 0;
     double x = centerX;
     while (startY < radius - 2 - radius * 0.15) {
-      // Draw a dash line
       canvas.drawLine(Offset(x, centerY - startY),
           Offset(x, centerY - startY - dashSpace + 5), paint);
       x += 5;

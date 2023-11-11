@@ -172,7 +172,6 @@ class _BLEProjectPageState extends State<BLEProjectPage> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 isScanning ? CircleRoute() : startScan(),
-                // const CircleRoute(),
               ]);
         },
       ),
