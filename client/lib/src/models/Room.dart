@@ -13,8 +13,8 @@ class Room {
 
   Room({
     this.id,
-    required this.map,
-    required this.name,
+    this.map = "",
+    this.name = "",
     required this.offset,
     required this.maSo,
     required this.neightbor,
@@ -24,8 +24,8 @@ class Room {
 
   Map<String, dynamic> toJson() {
     return {
-      'map': map,
-      'name': name,
+      'map': map ?? "",
+      'name': name ?? "",
       'maSo': maSo,
       'neightbor': neightbor,
       'luotTruyCap': luotTruyCap,
@@ -37,8 +37,8 @@ class Room {
   static Room fromJson(Map<String, dynamic> json) {
     return Room(
       id: json['_id'],
-      map: json['map'],
-      name: json['name'],
+      map: json['map'] ?? "",
+      name: json['name'] ?? "",
       neightbor: json['neightbor'],
       maSo: json['maSo'],
       luotTruyCap: json['luotTruyCap'],
