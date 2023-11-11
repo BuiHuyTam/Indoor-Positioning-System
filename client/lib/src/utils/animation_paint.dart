@@ -78,23 +78,6 @@ class CircleRouteState extends State<CircleRoute>
           }
         }
       });
-    for (var i = 0; i < bleController.scanResultList.length; i++) {
-      toStringBLE(bleController.scanResultList[i]);
-      bleController.updateBLEList(
-          deviceName: deviceName,
-          macAddress: macAddress,
-          rssi: rssi,
-          serviceUUID: serviceUUID,
-          manuFactureData: manuFactureData,
-          tp: tp);
-      InforPosition? temp =
-          infor.firstWhereOrNull((element) => element.macAddress == macAddress);
-      if (temp != null) {
-        bleController.updateselectedDeviceIdx(
-            i, 2, -temp.rssi1M, temp.offset.x, temp.offset.y, 0);
-      }
-      setState(() {});
-    }
   }
 
   num _logDistancePathLoss(double rssi, double alpha, double constantN) {
@@ -121,6 +104,23 @@ class CircleRouteState extends State<CircleRoute>
   @override
   Widget build(BuildContext context) {
     int tile = context.read<PositionManager>().location == 'Class' ? 85 : 62;
+    for (var i = 0; i < bleController.scanResultList.length; i++) {
+      toStringBLE(bleController.scanResultList[i]);
+      bleController.updateBLEList(
+          deviceName: deviceName,
+          macAddress: macAddress,
+          rssi: rssi,
+          serviceUUID: serviceUUID,
+          manuFactureData: manuFactureData,
+          tp: tp);
+      InforPosition? temp =
+          infor.firstWhereOrNull((element) => element.macAddress == macAddress);
+      if (temp != null) {
+        bleController.updateselectedDeviceIdx(
+            i, 2, -temp.rssi1M, temp.offset.x, temp.offset.y, 0);
+      }
+      setState(() {});
+    }
     return Stack(
       children: [
         Zoom(
