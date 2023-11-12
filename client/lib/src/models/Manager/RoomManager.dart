@@ -206,6 +206,11 @@ class RoomManager with ChangeNotifier {
   /// Hàm tìm đường đi
   List<Map> route(
       {required Room from, required Room to, required List<Room> listRoom}) {
+    print("from: " + from.toJson().toString());
+    print("to: " + from.toJson().toString());
+    for (var element in listRoom) {
+      print("element: " + element.toJson().toString());
+    }
     if (distance(Offset(from.offset.x, from.offset.y),
             Offset(to.offset.x, to.offset.y)) <
         1) {
