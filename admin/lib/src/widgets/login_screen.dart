@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lvtn_admin/src/widgets/home_screen.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -18,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
     'password': '',
   };
   final _isSubmitting = ValueNotifier<bool>(false);
-  final _passwordController = TextEditingController();
   bool hiddenPassword = true, errorLogin = false;
 
   // String username = '', password = '';
